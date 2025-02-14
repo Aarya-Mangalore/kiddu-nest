@@ -1,5 +1,6 @@
 <script>
   import { onMount, tick } from "svelte";
+
   export let emoji = "❤️";
   export let floatemoji = "❤️";
   export let bgcolor = "#ffe6f2";
@@ -11,14 +12,17 @@
     const { clientX: x, clientY: y } = event;
 
     for (let i = 0; i < 4; i++) {
+      let heartX = Math.min(Math.max(x, 20), window.innerWidth - 50);
+      let heartY = Math.min(Math.max(y, 20), window.innerHeight - 50);
+
       hearts = [
         ...hearts,
         {
           id: Date.now() + i,
-          x,
-          y,
-          offsetX: (Math.random() - 0.5) * 300,
-          offsetY: (Math.random() - 0.5) * 300,
+          x: heartX,
+          y: heartY,
+          offsetX: (Math.random() - 0.5) * 100,
+          offsetY: (Math.random() - 0.5) * 100,
           scale: Math.random() * 0.8 + 0.5,
           opacity: 0.6,
           emoji: floatemoji
@@ -35,14 +39,24 @@
 
   function generateFloatingHearts() {
     setInterval(() => {
+      const maxX = window.innerWidth - 50;
+      const maxY = window.innerHeight - 50;
+
+      let x = Math.random() * maxX;
+      let y = Math.random() * maxY;
+
+      // Ensure floating hearts stay within bounds
+      let offsetX = Math.min(Math.max((Math.random() - 0.5) * 200, -x), maxX - x);
+      let offsetY = Math.min(Math.max((Math.random() - 0.5) * 200, -y), maxY - y);
+
       floatingHearts = [
         ...floatingHearts,
         {
           id: Date.now(),
-          x: Math.random() * window.innerWidth,
-          y: Math.random() * window.innerHeight,
-          offsetX: (Math.random() - 0.5) * 500,
-          offsetY: (Math.random() - 0.5) * 500,
+          x,
+          y,
+          offsetX,
+          offsetY,
           scale: Math.random() * 0.8 + 0.5,
           opacity: 0.6,
           emoji: floatemoji
@@ -67,31 +81,32 @@
 </script>
 
 <style>
-  /* Main Background */
+  /* Full Background Cover */
   .background {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100vh; /* Ensures full coverage */
     background-color: var(--bgcolor);
     overflow: hidden;
-    z-index: -2; /* Behind everything */
+    z-index: -2;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  /* Clickable Overlay (Curtain Effect) */
+  /* Clickable Overlay */
   .click-layer {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 2; /* Brings it to the front */
+    z-index: 2;
   }
 
+  /* Beating Heart */
   .big-heart {
     font-size: 70vmin;
     opacity: 0.6;
@@ -103,6 +118,7 @@
     100% { transform: scale(1.1); }
   }
 
+  /* Floating and Clicked Hearts */
   .small-heart, .floating-heart {
     position: absolute;
     font-size: 4vmin;
@@ -112,9 +128,9 @@
 
   @keyframes curvedMove {
     0% { transform: translate(0, 0); }
-    25% { transform: translate(calc(var(--offsetX) * 0.5), calc(var(--offsetY) * 0.5)); }
-    50% { transform: translate(calc(var(--offsetX) * -1), calc(var(--offsetY) * -1)); }
-    75% { transform: translate(var(--offsetX), var(--offsetY)); }
+    25% { transform: translate(max(-50px, min(var(--offsetX), 50px)), max(-50px, min(var(--offsetY), 50px))); }
+    50% { transform: translate(max(-100px, min(var(--offsetX), 100px)), max(-100px, min(var(--offsetY), 100px))); }
+    75% { transform: translate(max(-50px, min(var(--offsetX), 50px)), max(-50px, min(var(--offsetY), 50px))); }
     100% { transform: translate(0, 0); }
   }
 
@@ -133,7 +149,7 @@
   <div class="big-heart">{emoji}</div>
 </div>
 
-<!-- Clickable Overlay (Now Emoji Clicks Work!) -->
+<!-- Clickable Overlay -->
 <div 
   class="click-layer"
   role="button"
@@ -145,13 +161,10 @@
 {#each hearts as heart (heart.id)}
   <div 
     class="small-heart" 
-    style="
-      left: {heart.x}px; 
-      top: {heart.y}px;
+    style="left: {heart.x}px; top: {heart.y}px;
       --offsetX: {heart.offsetX}px;
       --offsetY: {heart.offsetY}px;
-      --scale: {heart.scale};
-    "
+      --scale: {heart.scale};"
   >
     {heart.emoji}
   </div>
@@ -160,13 +173,10 @@
 {#each floatingHearts as heart (heart.id)}
   <div 
     class="floating-heart" 
-    style="
-      left: {heart.x}px; 
-      top: {heart.y}px;
+    style="left: {heart.x}px; top: {heart.y}px;
       --offsetX: {heart.offsetX}px;
       --offsetY: {heart.offsetY}px;
-      --scale: {heart.scale};
-    "
+      --scale: {heart.scale};"
   >
     {heart.emoji}
   </div>

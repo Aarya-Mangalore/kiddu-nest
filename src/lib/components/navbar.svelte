@@ -1,5 +1,6 @@
 <script>
-  import { onMount } from "svelte";
+  let isOpen = false;
+  
 </script>
 
 <style>
@@ -12,16 +13,57 @@
     backdrop-filter: blur(10px); /* Smooth glass effect */
     padding: 12px 20px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     z-index: 1000;
   }
 
+  .brand {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    margin-right: auto; /* Pushes links & toggle to the right */
+  }
+
   .nav-links {
     display: flex;
-    justify-content: space-between;
-    width: 70%;
-    max-width: 1000px;
+    gap: 20px;
+    padding-right: 20px; /* Prevents last link from getting cut off */
+  }
+
+  .menu-toggle {
+    display: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: white;
+    padding-right: 45px; /* Prevents it from being cut off */
+    position: absolute;
+    right: 20px; /* Keeps it inside the viewport */
+    z-index: 1100; /* Ensures it's above other elements */
+  }
+
+  /* Mobile Navigation */
+  @media (max-width: 768px) {
+    .nav-links {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      background: rgba(255, 105, 180, 0.8);
+      backdrop-filter: blur(15px);
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-links.open {
+      display: flex;
+    }
+
+    .menu-toggle {
+      display: block;
+    }
   }
 
   a {
@@ -36,65 +78,22 @@
     transition: all 0.3s ease-in-out;
   }
 
-  /* Neon Glow Hover Effect */
-  a::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 300%;
-    height: 300%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 80%);
-    transition: all 0.3s ease-in-out;
-    transform: translate(-50%, -50%) scale(0);
-  }
-
-  a:hover::before {
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  /* Hover Effect: Neon Glow + Text Color Change */
   a:hover {
-    color: #eb1818; /* Changes text color to cyan */
-    background: rgba(255, 255, 255, 0.15); /* Fixed the syntax */
+    color: #eb1818;
+    background: rgba(255, 255, 255, 0.15);
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-  }
-
-  /* Responsive Navbar for Smaller Screens */
-  @media (max-width: 768px) {
-    nav {
-      padding: 10px;
-    }
-    
-    .nav-links {
-      width: 90%;
-    }
-
-    a {
-      font-size: 1rem;
-      padding: 8px 14px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .nav-links {
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-    }
   }
 </style>
 
-
 <nav>
-  <div class="nav-links">
+  <div class="brand">KidduNest</div>
+
+  <div class="menu-toggle" on:click={() => (isOpen = !isOpen)}>☰</div>
+
+  <div class="nav-links {isOpen ? 'open' : ''}">
     <a href="/">Home</a>
     <a href="/memories">Memories</a>
-    <a href="/messenger">Messenger</a>
+    <a href="/diary">Diary</a>
     <a href="/countdown">Countdown</a>
   </div>
 </nav>
-<br>
-<br>
-<br>

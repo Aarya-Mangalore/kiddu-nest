@@ -51,28 +51,39 @@
   .text-section {
     flex: 1;
     text-align: center;
+    padding: 10px;
   }
 
   .title {
-    font-size: 4rem;
+    font-size: 3rem;
     font-weight: 800;
     color: #ff69b4; /* Pink */
   }
 
   .subtitle {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: #4a4a4a; /* Dark gray */
     max-width: 600px;
     margin-top: 1rem;
   }
 
+  @media (min-width: 768px) {
+    .title {
+      font-size: 4rem;
+    }
+    .subtitle {
+      font-size: 1.5rem;
+    }
+  }
+
   .image-gallery {
     flex: 1;
     display: flex;
-    justify-content: space-evenly; /* ✅ Evenly Spaced */
+    flex-wrap: wrap; /* ✅ Prevents overflow */
+    justify-content: center;
     align-items: center;
-    gap: 20px;
-    margin-top: 20px;
+    gap: 50px;
+    padding: 10px;
   }
 
   .image-frame {
@@ -117,9 +128,16 @@
   }
 
   .tilted-image {
-    width: 140px;
-    height: 180px;
+    width: 130px;
+    height: 170px;
     object-fit: cover;
     border-radius: 8px;
+  }
+
+  @media (min-width: 768px) {
+    .tilted-image {
+      width: 140px;
+      height: 180px;
+    }
   }
 </style>
