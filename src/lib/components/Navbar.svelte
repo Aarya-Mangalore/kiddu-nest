@@ -18,12 +18,29 @@
     z-index: 1000;
   }
 
+  img{
+    height: 50px;
+  }
+
   .brand {
+    display: flex;
+    align-items: center;
     font-size: 2rem;
     font-weight: bold;
     color: white;
     margin-right: auto; /* Pushes links & toggle to the right */
     user-select: none;
+  }
+
+  .brand a{
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    margin-right: auto; /* Pushes links & toggle to the right */
+    user-select: none;
+    padding: 0%;
   }
 
   .nav-links {
@@ -87,8 +104,12 @@
 </style>
 
 <nav>
-  <div class="brand">KidduNest</div>
-
+  
+  <div class="brand">
+    <a href="">
+    <img alt="Logo" src="/favicon.ico">
+    KidduNest</a></div>
+  
   <div class="menu-toggle" on:click={() => (isOpen = !isOpen)}>☰</div>
 
   <div class="nav-links {isOpen ? 'open' : ''}">
@@ -97,3 +118,4 @@
     <a href="/countdown">Birthday!!!</a>
   </div>
 </nav>
+<br>

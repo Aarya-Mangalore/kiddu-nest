@@ -104,8 +104,8 @@
       }
   
       .image-frame {
-        width: 160px;
-        height: 180px;
+        width: auto;
+        height: 190px;
       }
     }
   </style>

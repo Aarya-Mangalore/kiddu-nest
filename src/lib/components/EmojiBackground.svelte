@@ -9,11 +9,11 @@
   let floatingHearts = [];
 
   function addHearts(event) {
-    const { clientX: x, clientY: y } = event;
+    const { clientX: x, clientY: y, pageY } = event;
 
     for (let i = 0; i < 4; i++) {
       let heartX = Math.min(Math.max(x, 20), window.innerWidth - 50);
-      let heartY = Math.min(Math.max(y, 20), window.innerHeight - 50);
+      let heartY = pageY; // Uses pageY to move with scroll
 
       hearts = [
         ...hearts,
@@ -45,9 +45,8 @@
       let x = Math.random() * maxX;
       let y = Math.random() * maxY;
 
-      // Ensure floating hearts stay within bounds
-      let offsetX = Math.min(Math.max((Math.random() - 0.5) * 200, -x), maxX - x);
-      let offsetY = Math.min(Math.max((Math.random() - 0.5) * 200, -y), maxY - y);
+      let offsetX = (Math.random() - 0.5) * 200;
+      let offsetY = (Math.random() - 0.5) * 200;
 
       floatingHearts = [
         ...floatingHearts,
@@ -81,13 +80,19 @@
 </script>
 
 <style>
-  /* Full Background Cover */
+  /* Make sure body expands with content */
+  html, body {
+    min-height: 200vh;
+    overflow-x: hidden;
+  }
+
+  /* Fixed Background */
   .background {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh; /* Ensures full coverage */
+    height: 100vh;
     background-color: var(--bgcolor);
     overflow: hidden;
     z-index: -2;
@@ -96,13 +101,13 @@
     justify-content: center;
   }
 
-  /* Clickable Overlay */
+  /* Clickable Overlay Moves with Page */
   .click-layer {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     z-index: 2;
   }
 
@@ -118,8 +123,16 @@
     100% { transform: scale(1.1); }
   }
 
-  /* Floating and Clicked Hearts */
-  .small-heart, .floating-heart {
+  /* Floating Hearts Stay Fixed on Screen */
+  .floating-heart {
+    position: fixed;
+    font-size: 4vmin;
+    opacity: 0.6;
+    animation: curvedMove 10s infinite ease-in-out, fadeOut 30s ease-out forwards;
+  }
+
+  /* Clicked Hearts Move in Curved Path */
+  .small-heart {
     position: absolute;
     font-size: 4vmin;
     opacity: 0.6;
@@ -128,9 +141,9 @@
 
   @keyframes curvedMove {
     0% { transform: translate(0, 0); }
-    25% { transform: translate(max(-50px, min(var(--offsetX), 50px)), max(-50px, min(var(--offsetY), 50px))); }
-    50% { transform: translate(max(-100px, min(var(--offsetX), 100px)), max(-100px, min(var(--offsetY), 100px))); }
-    75% { transform: translate(max(-50px, min(var(--offsetX), 50px)), max(-50px, min(var(--offsetY), 50px))); }
+    25% { transform: translate(var(--offsetX), var(--offsetY)); }
+    50% { transform: translate(calc(var(--offsetX) * -1), calc(var(--offsetY) * -1)); }
+    75% { transform: translate(var(--offsetX), var(--offsetY)); }
     100% { transform: translate(0, 0); }
   }
 
@@ -144,12 +157,12 @@
   }
 </style>
 
-<!-- Main Background -->
+<!-- Fixed Background -->
 <div class="background" style="background-color: {bgcolor};">
   <div class="big-heart">{emoji}</div>
 </div>
 
-<!-- Clickable Overlay -->
+<!-- Clickable Overlay (Moves with Scroll) -->
 <div 
   class="click-layer"
   role="button"
