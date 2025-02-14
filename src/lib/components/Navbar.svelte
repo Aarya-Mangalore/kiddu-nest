@@ -23,6 +23,7 @@
     font-weight: bold;
     color: white;
     margin-right: auto; /* Pushes links & toggle to the right */
+    user-select: none;
   }
 
   .nav-links {
@@ -93,7 +94,6 @@
   <div class="nav-links {isOpen ? 'open' : ''}">
     <a href="/">Home</a>
     <a href="/memories">Memories</a>
-    <a href="/diary">Diary</a>
-    <a href="/countdown">Countdown</a>
+    <a href="/countdown">Birthday!!!</a>
   </div>
 </nav>

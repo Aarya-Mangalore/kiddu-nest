@@ -2,8 +2,11 @@ from flask import Flask, request, jsonify
 import pandas as pd
 import os
 from datetime import datetime
+from flask_cors import CORS  # Import CORS
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
+
 FILE_PATH = "diary.xlsx"
 
 # Initialize the Excel file if it doesn't exist

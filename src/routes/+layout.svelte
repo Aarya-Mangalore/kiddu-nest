@@ -4,4 +4,8 @@
   
   <Navbar />
   <slot />
-  
+  <style>
+    html{
+      user-select: none;
+    }
+  </style>

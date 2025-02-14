@@ -62,7 +62,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 200px;
+      width: auto;
       height: 220px;
       background: white;
       padding: 8px;
@@ -90,7 +90,7 @@
     }
   
     .tilted-image {
-      width: 100%;
+      width: auto;
       height: 100%;
       object-fit: cover;
       border-radius: 8px;
