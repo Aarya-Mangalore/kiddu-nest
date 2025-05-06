@@ -50,8 +50,6 @@
     date={entry["What was today's date again? 🤔🤔"]} 
     mood={entry["Overall, Ninn mood heg ithu?"]} 
     text={entry["Heng ithu ivathin dinaa?"]} 
-    image={entry["Enadru photo aitha? (please upload to Drive, give access to anyone with link and add link.)"]?.trim() || null}
-    audio={entry["Song issta aythu illa enadru helbeka ?? (please upload to Drive, give access to anyone with link and add link.)"]?.trim() || null}
   />
 {/each}
 
