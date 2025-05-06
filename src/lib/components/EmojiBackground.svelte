@@ -4,6 +4,8 @@
   export let emoji = "❤️";
   export let floatemoji = "❤️";
   export let bgcolor = "#ffe6f2";
+  export let clickdisabled = false; // Set to false to disable heart clicks
+
 
   let hearts = [];
   let floatingHearts = [];
@@ -111,6 +113,8 @@
     z-index: 2;
   }
 
+  
+
   /* Beating Heart */
   .big-heart {
     font-size: 70vmin;
@@ -163,13 +167,16 @@
 </div>
 
 <!-- Clickable Overlay (Moves with Scroll) -->
-<div 
-  class="click-layer"
-  role="button"
-  tabindex="0"
-  on:click={addHearts}
-  on:keydown={handleKeydown}
-></div>
+{#if !clickdisabled}
+  <div 
+    class="click-layer"
+    role="button"
+    tabindex="-2"
+    on:click={addHearts}
+    on:keydown={handleKeydown}
+  ></div>
+{/if}
+
 
 {#each hearts as heart (heart.id)}
   <div 

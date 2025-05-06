@@ -1,108 +1,99 @@
 <script>
-    import { onMount } from "svelte";
-    let notes = [];
-    let newNoteText = "";
-    
-    async function fetchNotes() {
-        const res = await fetch("http://127.0.0.1:5000/notes");
-        notes = await res.json();
-    }
+  import BookBg from "$lib/components/EmojiBackground.svelte";
+  import DiaryCard from "$lib/components/DiaryCard.svelte";
+  import { goto } from '$app/navigation';
+  import Papa from 'papaparse';
 
-    async function addNote() {
-        if (!newNoteText) return;
-        await fetch("http://127.0.0.1:5000/notes", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: newNoteText }),
-        });
-        newNoteText = "";
-        fetchNotes();
-    }
+  let entries = [];
 
-    async function updateNote(index, text) {
-        await fetch(`http://127.0.0.1:5000/notes/${index}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text }),
-        });
-        fetchNotes();
-    }
+  // Fetch CSV from Google Sheets
+  async function fetchDiaryEntries() {
+      const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1s8WJrb-vnBKuTXWDILuQC8gXgNRtt1hpAio1zfyPdyFKpfOx5D3KvfgxXog86pVPsVaCBj0n1VAS/pub?output=csv');
+      const csvText = await response.text();
+      
+      // Parse the CSV text into an array
+      Papa.parse(csvText, {
+          header: true,
+          skipEmptyLines: true,
+          complete: function(results) {
+              // Map entries with a unique 'id' for each entry
+              entries = results.data.map((entry, index) => ({
+                  ...entry,
+                  id: index // Using index as a unique ID
+              })).reverse();  // Reverse the order to display newest first
+          }
+      });
+  }
 
-    async function deleteNote(index) {
-        await fetch(`http://127.0.0.1:5000/notes/${index}`, { method: "DELETE" });
-        fetchNotes();
-    }
+  // Fetch entries when component mounts
+  import { onMount } from 'svelte';
+  onMount(fetchDiaryEntries);
 
-    onMount(fetchNotes);
+  function handleAddEntry() {
+      goto('/add-entry');
+  }
 </script>
 
-<style>
-    .container {
-        width: 80%;
-        margin: auto;
-        text-align: center;
-    }
-    .note {
-        background: white;
-        padding: 15px;
-        margin: 10px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        text-align: left;
-        position: relative;
-    }
-    .note textarea {
-        width: 100%;
-        border: none;
-        font-size: 1rem;
-    }
-    .buttons {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-    }
-    button {
-        margin-left: 10px;
-        cursor: pointer;
-        padding: 5px 10px;
-        border: none;
-        background: #ff6b6b;
-        color: white;
-        border-radius: 5px;
-    }
-    button.edit {
-        background: #4caf50;
-    }
-    .add-note {
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-    }
-    input {
-        padding: 10px;
-        width: 300px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-</style>
-<br>
-<br>
-<br>
-<div class="container">
-    <div class="add-note">
-        <input bind:value={newNoteText} placeholder="Write a new note..." />
-        <button on:click={addNote}>Add</button>
-    </div>
+<BookBg emoji='📚' bgcolor='rgba(240, 230, 170, 0.75)' floatemoji="📕" />
 
-    {#each notes as note, index}
-        <div class="note">
-            <div class="buttons">
-                <button class="edit" on:click={() => updateNote(index, note.Text)}>Save</button>
-                <button on:click={() => deleteNote(index)}>Delete</button>
-            </div>
-            <p><strong>{note.Date}</strong></p>
-            <textarea bind:value={note.Text}></textarea>
-        </div>
-    {/each}
+<div class="diary-page">
+  <h1 class="title">📚Diary page📕</h1>
+  
+  <!-- Add Entry Button -->
+  <button class="add-entry-btn" on:click={handleAddEntry}>
+    ➕ Add New Entry
+  </button>
+
+  <!-- Loop through diary entries and render DiaryCard -->
+  {#each entries as entry (entry.id)}
+  <DiaryCard 
+    date={entry["What was today's date again? 🤔🤔"]} 
+    mood={entry["Overall, Ninn mood heg ithu?"]} 
+    text={entry["Heng ithu ivathin dinaa?"]} 
+    image={entry["Enadru photo aitha? (please upload to Drive, give access to anyone with link and add link.)"]?.trim() || null}
+    audio={entry["Song issta aythu illa enadru helbeka ?? (please upload to Drive, give access to anyone with link and add link.)"]?.trim() || null}
+  />
+{/each}
+
 </div>
+
+<style>
+.diary-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding-top: 2rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #ff69b4;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.add-entry-btn {
+  background: linear-gradient(135deg, #ff69b4, #ffc0cb);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 2rem;
+  z-index: 10;
+}
+
+.add-entry-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
+.add-entry-btn:active {
+  transform: scale(0.97);
+}
+</style>

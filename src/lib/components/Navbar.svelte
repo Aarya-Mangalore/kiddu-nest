@@ -8,7 +8,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     background: rgba(255, 105, 180, 0.3); /* Translucent pink */
     backdrop-filter: blur(10px); /* Smooth glass effect */
     padding: 12px 20px;
@@ -16,6 +16,8 @@
     justify-content: space-between;
     align-items: center;
     z-index: 1000;
+    overflow: hidden;
+    
   }
 
   img{
@@ -73,14 +75,18 @@
       padding: 10px;
       border-radius: 10px;
       box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      padding-right: 30px;
+      z-index: 1000;
     }
 
     .nav-links.open {
       display: flex;
+      z-index: 1000;
     }
 
     .menu-toggle {
       display: block;
+      z-index: 1000;
     }
   }
 
@@ -106,7 +112,7 @@
 <nav>
   
   <div class="brand">
-    <a href="">
+    <a href="/">
     <img alt="Logo" src="/favicon.ico">
     KidduNest</a></div>
   
@@ -116,6 +122,7 @@
     <a href="/">Home</a>
     <a href="/memories">Memories</a>
     <a href="/countdown">Birthday!!!</a>
+    <a href="/diary">Diary</a>
   </div>
 </nav>
 <br>
