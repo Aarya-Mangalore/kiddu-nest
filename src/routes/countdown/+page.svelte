@@ -6,34 +6,38 @@
   const birthday = new Date(new Date().getFullYear(), 1, 15, 0, 0, 0); // Feb 15
 
   function updateCountdown() {
-      const now = new Date();
-      let diff = birthday - now;
+    const now = new Date();
+    let diff = birthday - now;
 
-      if (diff <= 0) {
-          countdown = "🎉 Happy Birthday Kidamma!! 🎉";
-          return;
-      }
+    if (diff <= 0) {
+      countdown = "🎉 Happy Birthday Kidamma!! 🎉";
+      return;
+    }
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-      countdown = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    countdown = `${days}d ${hours}h ${minutes}m ${seconds}s`;
   }
 
   onMount(() => {
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
   });
 </script>
 
-<CakeBackground emoji='🎂' bgcolor='rgba(240, 230, 170, 0.75)' floatemoji="🎉"/>
+<CakeBackground
+  emoji="🎂"
+  bgcolor="rgba(240, 230, 170, 0.75)"
+  floatemoji="🎉"
+/>
 
 <main class="container">
   <!-- Left Section: Countdown Timer -->
   <div class="text-section">
-    <br>
+    <br />
     <h1 class="title">Countdown to Kidamma's Birthday 🎂</h1>
     <div class="timer">{countdown}</div>
   </div>
@@ -41,7 +45,7 @@
   <!-- Right Section: Tilted Image -->
   <div class="image-gallery">
     <div class="image-frame img-1">
-      <img src="/kidu/kiduWithCake.jpg" alt="Birthday Cake" class="tilted-image">
+      <img src="/kidu/Huva-Kidu.png" alt="Birthday Cake" class="tilted-image" />
     </div>
   </div>
 </main>
@@ -102,7 +106,9 @@
     padding: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease-in-out;
-    animation: fadeIn 1s ease-out, tiltAnimation 1s ease-in-out;
+    animation:
+      fadeIn 1s ease-out,
+      tiltAnimation 1s ease-in-out;
   }
 
   @keyframes tiltAnimation {
@@ -125,7 +131,10 @@
     }
   }
 
-  .img-1 { --tilt-angle: -8deg; transform: rotate(-8deg); }
+  .img-1 {
+    --tilt-angle: -8deg;
+    transform: rotate(-8deg);
+  }
 
   .image-frame:hover {
     transform: scale(1.1) rotate(var(--tilt-angle));
